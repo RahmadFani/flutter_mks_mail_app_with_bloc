@@ -1,25 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import 'routes/app_pages.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'app.dart';
+import 'bloc_observer.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute: Routes.HOME,
-      getPages: AppPages.pages,
-    );
-  }
+ BlocOverrides.runZoned(
+    () => runApp(const App()),
+    blocObserver: AppBlocObserver(),
+  );
 }

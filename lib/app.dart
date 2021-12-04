@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test/blocs/authentication/authentication_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import 'blocs/theme/theme_cubit.dart';
+import 'repositories/authentication_repository.dart';
 import 'routes/app_pages.dart';
 
 /// {@template app}
@@ -12,14 +14,28 @@ import 'routes/app_pages.dart';
 /// to manage the state
 /// {@endtemplate}
 class App extends StatelessWidget {
-  /// {@macro app}
-  const App({Key? key}) : super(key: key);
+  /// {app}
+  const App({
+    Key? key,
+    required AuthenticationRepository authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
+        super(key: key);
+
+  final AuthenticationRepository _authenticationRepository;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ThemeCubit(),
-      child: const AppView(),
+    return RepositoryProvider.value(
+      value: _authenticationRepository,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => ThemeCubit()),
+          BlocProvider(
+              create: (_) => AuthenticationBloc(
+                  authenticationRepository: _authenticationRepository))
+        ],
+        child: const AppView(),
+      ),
     );
   }
 }
@@ -37,7 +53,7 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeData>(builder: (_, theme) {
       return GetMaterialApp(
-        title: 'Flutter Demo',
+        title: 'MKS',
         theme: theme,
         initialRoute: Routes.HOME,
         getPages: AppPages.pages,

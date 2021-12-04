@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /// {@endtemplate}
 class ThemeCubit extends Cubit<ThemeData> {
   /// {@macro brightness_cubit}
-  ThemeCubit() : super(_lightTheme);
+  ThemeCubit() : super(_darkTheme);
 
   static final _lightTheme = ThemeData(
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
